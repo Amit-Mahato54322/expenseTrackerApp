@@ -1,48 +1,42 @@
 import { firestore } from "../config/firebaseConfig";
+import { collection, doc, addDoc, onSnapshot, query, orderBy, deleteDoc } from "firebase/firestore";
 
 export const storeDataAction = (data) => {
   return (dispatch) => {
-    firestore
-      .collection("users")
-      .doc(data.userId)
-      .collection("expenses")
-      .add({
-        amount: data.amount,
-        date: new Date(),
-        expenseName: data.name,
-      })
-      .then((res) => {
-        dispatch({ type: "STORE_DATA", res });
-      })
-      .catch((err) => {
-        dispatch({ type: "STORE_ERROR", err });
-      });
+    const userExpensesCollection = collection(doc(collection(firestore, "users"), data.userId), "expenses");
+    
+    addDoc(userExpensesCollection, {
+      amount: data.amount,
+      date: new Date(),
+      expenseName: data.name,
+    })
+    .then((docRef) => {
+      dispatch({ type: "STORE_DATA", res: docRef });
+    })
+    .catch((err) => {
+      dispatch({ type: "STORE_ERROR", err });
+    });
   };
 };
 
 export const getDataAction = (userId) => {
   return (dispatch) => {
-    firestore
-      .collection("users")
-      .doc(userId)
-      .collection("expenses")
-      .orderBy("date", "desc")
-      .onSnapshot((res) => {
-        const data = res.docs.map((d) => ({ id: d.id, ...d.data() }));
-        dispatch({ type: "GOT_DATA", data });
-      });
+    const userExpensesCollection = collection(doc(collection(firestore, "users"), userId), "expenses");
+    const expensesQuery = query(userExpensesCollection, orderBy("date", "desc"));
+    
+    onSnapshot(expensesQuery, (querySnapshot) => {
+      const data = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+      dispatch({ type: "GOT_DATA", data });
+    });
   };
 };
 
 export const deleteCardAction = (docId) => {
   return (dispatch, getState) => {
     const userId = getState().auth.user.uid;
-    firestore
-      .collection("users")
-      .doc(userId)
-      .collection("expenses")
-      .doc(docId)
-      .delete()
+    const expenseDocRef = doc(collection(doc(collection(firestore, "users"), userId), "expenses"), docId);
+    
+    deleteDoc(expenseDocRef)
       .then(() => {
         dispatch({ type: "DELETE_DOC", docId });
       })

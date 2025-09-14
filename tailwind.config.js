@@ -1,6 +1,13 @@
-module.exports = {
-  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: "media", // or 'media' or 'class'
+  corePlugins: {
+    preflight: true,
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       fontFamily: {

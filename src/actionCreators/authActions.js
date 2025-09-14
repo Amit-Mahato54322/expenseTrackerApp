@@ -1,11 +1,11 @@
 import { auth } from "../config/firebaseConfig";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 export const signUpAction = (creds) => {
   return (dispatch) => {
-    auth
-      .createUserWithEmailAndPassword(creds.email, creds.password)
-      .then((res) => {
-        res.user.updateProfile({ displayName: creds.username });
+    createUserWithEmailAndPassword(auth, creds.email, creds.password)
+      .then((userCredential) => {
+        return updateProfile(userCredential.user, { displayName: creds.username });
       })
       .then(() => {
         dispatch({
@@ -21,10 +21,9 @@ export const signUpAction = (creds) => {
 
 export const logInAction = (creds) => {
   return (dispatch) => {
-    auth
-      .signInWithEmailAndPassword(creds.email, creds.password)
-      .then((res) => {
-        dispatch({ type: "LOG_IN", res });
+    signInWithEmailAndPassword(auth, creds.email, creds.password)
+      .then((userCredential) => {
+        dispatch({ type: "LOG_IN", res: userCredential });
       })
       .catch((err) => {
         dispatch({ type: "LOG_IN_ERROR", err });
