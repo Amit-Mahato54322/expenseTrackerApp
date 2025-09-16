@@ -6,6 +6,7 @@ import {
   getDataAction,
 } from "../actionCreators/databaseActions";
 import Card from "../components/Card";
+import LoadingSpinner from "../components/LoadingSpinner";
 import { motion } from "framer-motion";
 
 
@@ -47,8 +48,9 @@ function Dashboard() {
 
   if (isFetching)
     return (
-      <div className="h-20 w-20 absolute top-1/2 left-1/2 flex items-center justify-center text-lg text-gray-400">
-        Loading...
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <LoadingSpinner size="large" />
+        <p className="mt-4 text-gray-600 font-medium">Loading your dashboard...</p>
       </div>
     );
   if (user == null) return <Redirect to="/" />;
@@ -66,37 +68,38 @@ function Dashboard() {
       initial={{ opacity: 0 }}
       transition={{ duration: 1 }}
       id="dashboard"
-      className="container lg:px-6   max-w-full grid lg:grid-cols-3  overflow-y-auto lg:overflow-hidden"
+      className="container lg:px-6 max-w-full grid lg:grid-cols-3 gap-6 overflow-y-auto lg:overflow-hidden bg-gray-50 pb-6"
     >
       <div
         id="left"
-        className="container flex lg:py-5 mx-auto w-full flex-col justify-between items-center"
+        className="container flex lg:py-5 mx-auto w-full flex-col justify-between items-center gap-6"
       >
         <motion.div
           animate={{ opacity: 1 }}
           initial={{ opacity: 0 }}
           transition={{ duration: 0.7, type: "tween" }}
           id="info"
-          className="container bg-white p-10 lg:w-3/4 w-full border rounded-md shadow-md mb-8 font-Nunito flex flex-col"
+          className="container bg-white p-8 lg:w-3/4 w-full rounded-xl shadow-lg font-Nunito flex flex-col"
         >
           <div
-            id="top-info"
-            className="flex justify-between  max-w-full items-center mb-10 "
+            id="total-balance"
+            className="mb-6 bg-gradient-to-r from-primary to-indigo-500 p-4 rounded-lg text-white"
           >
-            <div className="flex flex-col justify-center items-center ">
-              <h1 className="font-semibold text-2xl uppercase">Income</h1>
-              <p className="text-green-500 font-medium">{`$${income}`}</p>
-            </div>
-            <div className="flex flex-col justify-center items-center ">
-              <h1 className="font-semibold text-2xl uppercase">Expense</h1>
-              <p className="text-red-500 font-medium">{`$${expense}`}</p>
-            </div>
+            <h2 className="text-3xl font-bold">${total}</h2>
+            <p className="text-white opacity-80 text-sm">Total Balance</p>
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold">
-              {total} <sup className="text-gray-400">INR</sup>{" "}
-            </h2>
-            <p className="text-gray-400">Total Balance</p>
+          <div
+            id="top-info"
+            className="flex justify-between max-w-full items-center"
+          >
+            <div className="flex flex-col bg-green-50 rounded-lg p-4 w-full mr-2">
+              <h1 className="font-semibold text-lg uppercase text-gray-700">Income</h1>
+              <p className="text-green-500 font-bold text-2xl">${income}</p>
+            </div>
+            <div className="flex flex-col bg-red-50 rounded-lg p-4 w-full ml-2">
+              <h1 className="font-semibold text-lg uppercase text-gray-700">Expense</h1>
+              <p className="text-red-500 font-bold text-2xl">${expense}</p>
+            </div>
           </div>
         </motion.div>
         <motion.div
@@ -104,17 +107,17 @@ function Dashboard() {
           initial={{ opacity: 0 }}
           transition={{ duration: 0.7, type: "tween" }}
           id="add-transaction"
-          className="lg:w-3/4 w-full lg:mb-0 mb-8 bg-white p-8 rounded-md border-0 shadow-md"
+          className="lg:w-3/4 w-full lg:mb-0 mb-8 bg-white p-8 rounded-xl border-0 shadow-lg"
         >
           <form className="mb-0 space-y-6" onSubmit={handleSubmit}>
             <div>
-              <h1 className="font-Nunito font-semibold text-xl mb-3">
+              <h1 className="font-Nunito font-bold text-2xl mb-4 text-gray-800">
                 New Transaction
               </h1>
-              <div className="mb-2">
+              <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Name
                 </label>
@@ -126,13 +129,14 @@ function Dashboard() {
                     id="name"
                     autoComplete="off"
                     required
-                    className="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-indigo-600 focus:ring-1"
+                    placeholder="Transaction name"
+                    className="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                   />
                 </div>
               </div>
               <label
                 htmlFor="amount"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Amount (use "<span className="font-bold text-black">-</span>"
                 for expenses)
@@ -145,16 +149,17 @@ function Dashboard() {
                   id="amount"
                   autoComplete="off"
                   required
-                  className="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-indigo-600 focus:ring-1"
+                  placeholder="100 or -100"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
               </div>
             </div>
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-3 px-4 border border-transparent shadow-sm bg-primary hover:opacity-95 font-Roboto font-medium text-white text-center text-lg rounded-lg focus:ring-2 focus:outline-none focus:ring-offset-2 focus:ring-indigo-600 hover:shadow-md "
+                className="w-full flex justify-center py-3 px-4 border-0 shadow-lg bg-primary hover:bg-indigo-600 font-Roboto font-medium text-white text-center text-lg rounded-lg focus:outline-none transition-all duration-200 hover:scale-[1.02]"
               >
-                Add
+                Add Transaction
               </button>
             </div>
           </form>
@@ -165,24 +170,31 @@ function Dashboard() {
         initial={{ opacity: 0 }}
         transition={{ duration: 0.7, type: "tween" }}
         id="right"
-        className="lg:col-span-2 container bg-white flex flex-col justify-start lg:py-5 lg:px-10 px-3 py-5  shadow-md mx-auto items-stretch w-full rounded-md"
+        className="lg:col-span-2 container bg-white flex flex-col justify-start lg:py-6 lg:px-8 px-4 py-6 shadow-lg mx-auto items-stretch w-full rounded-xl"
       >
         <div>
-          <h1 className="font-Nunito font-bold text-3xl mb-2">History 👀</h1>
-          {docs &&
-            docs.map((doc) => {
-              return (
-                <Card
-                  key={doc.id}
-                  id={doc.id}
-                  expenseName={doc.expenseName}
-                  amount={doc.amount}
-                  date={doc.date}
-                  setExpense={setExpense}
-                  setIncome={setIncome}
-                />
-              );
-            })}
+          <h1 className="font-Nunito font-bold text-3xl mb-4 flex items-center">
+            <span className="mr-2">Transaction History</span>
+            <span role="img" aria-label="eyes">👀</span>
+          </h1>
+          
+          {docs && docs.length > 0 ? (
+            docs.map((doc) => (
+              <Card
+                key={doc.id}
+                id={doc.id}
+                expenseName={doc.expenseName}
+                amount={doc.amount}
+                date={doc.date}
+                setExpense={setExpense}
+                setIncome={setIncome}
+              />
+            ))
+          ) : (
+            <div className="text-gray-500 text-center py-8">
+              No transactions yet. Add your first one!
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>

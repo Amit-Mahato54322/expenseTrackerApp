@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logInAction } from "../actionCreators/authActions";
 import { Redirect } from "react-router";
 import { motion } from "framer-motion";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,12 @@ function Login() {
   };
 
   if (isFetching) {
-    return <div className="min-h-screen flex items-center justify-center bg-white text-lg text-gray-400">Loading...</div>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <LoadingSpinner size="large" />
+        <p className="mt-4 text-gray-600 font-medium">Logging you in...</p>
+      </div>
+    );
   }
 
   if (user) {
