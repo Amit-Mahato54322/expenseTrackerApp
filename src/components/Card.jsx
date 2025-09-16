@@ -30,7 +30,7 @@ function Card({ id, amount, expenseName, date }) {
             amount[0] === "-" ? `text-red-500` : `text-green-500`
           }`}
         >
-          {`₹${amount}`}
+          {`$${amount}`}
         </h1>
         <svg
           xmlns="http://www.w3.org/2000/svg"

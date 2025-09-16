@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction } from "../actionCreators/authActions";
 import { motion } from "framer-motion";
-import wallet2 from "../imgs/wallet2.png";
-import wallet from "../imgs/wallet.png";
+
 
 function SignUp({ history }) {
   const dispatch = useDispatch();
@@ -25,22 +24,7 @@ function SignUp({ history }) {
 
   return (
     <>
-      <motion.img
-        animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-        initial={{ opacity: 0, x: -100, y: 50, scale: 2 }}
-        transition={{ delay: 0.8, duration: 1, type: "spring" }}
-        src={wallet}
-        alt="safe"
-        className="lg:h-52 lg:w-52 h-32 w-32 z-10 top-8/5  absolute lg:top-1/2 lg:right-28 right-5"
-      />
-      <motion.img
-        animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-        initial={{ opacity: 0, x: 100, y: 50, scale: 2 }}
-        transition={{ delay: 0.8, duration: 1, type: "spring" }}
-        src={wallet2}
-        alt="safe"
-        className="lg:h-52 lg:w-52 h-32 w-32 z-10  absolute lg:top-1/2 top-8/5 lg:left-28 left-5"
-      />
+
       <motion.div
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}

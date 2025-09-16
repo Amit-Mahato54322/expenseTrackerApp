@@ -7,7 +7,7 @@ import {
 } from "../actionCreators/databaseActions";
 import Card from "../components/Card";
 import { motion } from "framer-motion";
-import bars from "../imgs/bars.svg";
+
 
 function Dashboard() {
   const user = useSelector((state) => state.auth.user);
@@ -47,11 +47,9 @@ function Dashboard() {
 
   if (isFetching)
     return (
-      <img
-        className="h-20 w-20 absolute top-1/2 left-1/2"
-        src={bars}
-        alt="loader"
-      />
+      <div className="h-20 w-20 absolute top-1/2 left-1/2 flex items-center justify-center text-lg text-gray-400">
+        Loading...
+      </div>
     );
   if (user == null) return <Redirect to="/" />;
 
@@ -87,11 +85,11 @@ function Dashboard() {
           >
             <div className="flex flex-col justify-center items-center ">
               <h1 className="font-semibold text-2xl uppercase">Income</h1>
-              <p className="text-green-500 font-medium">{`₹${income}`}</p>
+              <p className="text-green-500 font-medium">{`$${income}`}</p>
             </div>
             <div className="flex flex-col justify-center items-center ">
               <h1 className="font-semibold text-2xl uppercase">Expense</h1>
-              <p className="text-red-500 font-medium">{`₹${expense}`}</p>
+              <p className="text-red-500 font-medium">{`$${expense}`}</p>
             </div>
           </div>
           <div>

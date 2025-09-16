@@ -1,5 +1,5 @@
 import React from "react";
-import bank from "../imgs/bank.png";
+
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -42,18 +42,7 @@ function Home() {
             </Link>
           </motion.div>
         </div>
-        <motion.img
-          animate={{ opacity: 1, y: 0 }}
-          initial={{ y: 100, opacity: 0 }}
-          transition={{
-            delay: 0.5,
-            duration: 0.8,
-            type: "tween",
-          }}
-          src={bank}
-          alt="hero"
-          className="lg:h-hero lg:relative z-40 h-96 w-96 top-full lg:w-hero"
-        />
+       
       </div>
 
       <svg
